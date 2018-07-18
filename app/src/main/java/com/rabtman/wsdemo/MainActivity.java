@@ -23,6 +23,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.rabtman.wsmanager.Bean.DataBean;
+import com.rabtman.wsmanager.Bean.TypeBean;
+import com.rabtman.wsmanager.Bean.WebsoketBean;
 import com.rabtman.wsmanager.WsManager;
 import com.rabtman.wsmanager.listener.WsStatusListener;
 
@@ -143,6 +147,8 @@ public class MainActivity extends AppCompatActivity {
         btn_send.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 String content = edit_content.getText().toString();
                 if (!TextUtils.isEmpty(content)) {
                     if (wsManager != null && wsManager.isWsConnected()) {
@@ -154,8 +160,7 @@ public class MainActivity extends AppCompatActivity {
                                             ContextCompat.getColor(getBaseContext(), android.R.color.holo_green_light))));
                             tv_content.append(content + "\n\n");
                         } else {
-                            tv_content.append(Spanny.spanText("消息发送失败\n", new ForegroundColorSpan(
-                                    ContextCompat.getColor(getBaseContext(), android.R.color.holo_red_light))));
+                            tv_content.append(Spanny.spanText("消息发送失败\n", new ForegroundColorSpan(ContextCompat.getColor(getBaseContext(), android.R.color.holo_red_light))));
                         }
                         showOrHideInputMethod();
                         edit_content.setText("");
@@ -174,6 +179,16 @@ public class MainActivity extends AppCompatActivity {
                 tv_content.setText("");
             }
         });
+
+        WebsoketBean<DataBean> objectWebsoketBean = new WebsoketBean<>();
+        objectWebsoketBean.exec = 1;
+        DataBean<TypeBean> typeBeanDataBean = new DataBean<>();
+        TypeBean typeBean = new TypeBean();
+        typeBean.topic_ticker = 100;
+        typeBeanDataBean.type = typeBean;
+        objectWebsoketBean.data = typeBeanDataBean;
+        String s = new Gson().toJson(objectWebsoketBean);
+        Log.e("kevin", "s=" + s);
     }
 
     @Override
